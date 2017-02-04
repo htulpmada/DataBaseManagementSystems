@@ -1,0 +1,62 @@
+Adam pluth
+CS457 DBMS
+Assignment #2
+
+
+1)	A Schema is How the the  data is organized and the relationships between them. Examples would be number of tables, attributes, relationships between attributes of each table. This can be sumed up as the meta-data. the Database State, on the other hand, would be the actual values of these variables.
+
+2)	
+
+3)	The Cardinality Ratio is a ratio that defines a numeric rlationship between two or more entities. an example of this would be that a person may have more than one child but a child only has two parents. Participation constraints define the manditory existance of an attribute. An example of this is that a pesron may not have any children at all, but a child must have parents.
+
+4)
+	a)  super key: 	table		key
+			-------------------
+			employee	SSN
+			department	DNUMBER
+			dept_locations	DNUMBER
+			WORKS_ON	none
+			project		PNAME, PNUMBER
+			dependant	DEPENDANT_NAME
+
+	b)  In the dependent table the attribute DEPENDENT_NAME was not chosen as a primary key. 
+
+	c)  Minimal key with more than one column
+		table: employee  
+		KEY: name -> columns(fname, minit, lname)
+
+	d)  Composite attribute: name, consists of fname, minit, lname
+
+5)	advantages:
+		only have to check versus only attribute reducing need for nested queries or join operations
+
+	disadvantages:
+		more room for error on input, could accidentally conflict previous entry
+
+6)	product vs join:
+
+	Example 1: 
+   	   Movie database query for two actors in multiple movies together
+			
+		Cartesian product:
+			would return all movies both actors have ever made with duplicates of the movies the two actors shared
+	
+		InnerJoin:
+			would return all movies the two actors had in common
+	
+		OuterJoin:
+			would return all movies the two actors had made excluding the ones the two had in common
+	
+
+	
+	Example 2: 
+	   Auto Parts store query for vendors that sells a car part we need to order,we need to find the cheapest price for the part
+
+		Cartesian product:
+			would return all vendors and all parts
+		
+		InnerJoin:
+			would return all vendors that offered that particular part
+	
+		OuterJoin:
+			would return all vandors that did not sell the part
