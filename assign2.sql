@@ -1,42 +1,92 @@
-select AVG(salary)
-from employee;
 
-select lname, salary
-from EMPLOYEE
-where salary > (select AVG(SALARY) from employee);
+--#7.a
+SELECT ssn, fname, lname, dno, superssn
+FROM Employee left outer join department on dname<>'Research'
+WHERE superssn<>888665555 and dno=dnumber;
 
-select lname, salary
-from EMPLOYEE e
-where salary > (select AVG(SALARY) from employee where dno = e.dno);
+--#7.b not sure if this counts
+SELECT ssn, fname, lname, dno, superssn
+FROM Employee left outer join department on dname<>'Research'
+WHERE superssn<>888665555 and dno=dnumber;
 
-select dname, count(*), AVG(salary) 
-from employee ,department
-where dno = dnumber
-group by dname;
+--#7.c
+SELECT ssn, fname, lname, dno, superssn
+FROM Employee
+WHERE superssn<>888665555  and 
+dno not in (select dnumber from department where dname ='Research');
 
-select lname, dname, dnumber, salary
-from employee, department
-where dno=dnumber and salary > 32000;
+--#7.d
 
-select dname, dnumber, avg(salary)
-from employee, DEPARTMENT
-where dno=dnumber
-group by dname, dnumber;
 
-select dname, dnumber, avg(salary)
-from employee, DEPARTMENT
-where dno=dnumber
-group by dname, dnumber
-having avg(salary) >32000;
 
-select pname 
-from employee, project, works_on
-where ssn=essn and pno=pnumber and lname='Smith'
-intersect
-select pname
-from employee, DEPARTMENT, PROJECT
-where DEPARTMENT.MGRSSN= ssn and dnum = dnumber and lname = 'Wong';
+--#8. List the SSN, lname, and hours of all employees (with a dependent) who work <= 10 hours per week on the Computerization project. List each employee only once if 
+--they have more than one dependent. 
 
-select ssn from employee
-where ssn not in (select essn from works_on);
+SELECT ssn, lname, hours, pno
+FROM employee, works_on w, project, dependent d
+WHERE pno=pnumber and pname = 'Computerization' and d.essn=ssn and w.essn=ssn and hours <= 10
+INTERSECT 
+SELECT ssn, lname, hours, pno
+FROM employee, works_on w, project, dependent d
+WHERE pno=pnumber and pname = 'Computerization' and d.essn=ssn and w.essn=ssn and hours <= 10;
 
+--#9.a
+
+SELECT ssn
+FROM employee
+minus
+SELECT ssn
+FROM employee, project, works_on
+WHERE pno=pnumber and ssn=essn and pname='ProductY';
+
+
+--#10
+
+SELECT ssn, address
+FROM employee, project, works_on
+WHERE pno=pnumber and ssn=essn and pname='ProductY'
+INTERSECT
+SELECT ssn, address
+FROM employee, project, works_on
+WHERE pno=pnumber and ssn=essn and pname='ProductZ';
+
+--#11
+
+Select count(*) as num_dep
+from dependent;
+
+--#12
+
+Select count( distinct ssn ) as cnt
+from employee, dependent
+where essn=ssn;
+
+--#13
+SELECT * 
+from 
+(SELECT distinct ssn, fname, lname 
+from employee, dependent
+where essn=ssn) 
+e1 join 
+(Select ssn
+from employee, dependent
+where essn=ssn
+group by ssn
+having count(essn) > 0)
+e2 on e1.ssn=e2.ssn;
+
+--#14.a
+
+SELECT * 
+from 
+(SELECT distinct ssn, fname, lname 
+from employee, dependent
+) 
+e1 left join 
+(Select ssn, count(essn)
+from employee, dependent
+where essn=ssn
+group by ssn
+having count(essn) > -1)
+e2 on e1.ssn=e2.ssn
+ORDER BY lname;
