@@ -1,0 +1,41 @@
+
+//#7.a
+SELECT ssn, fname, lname, dno, superssn
+FROM Employee left outer join department on dname<>'Research'
+WHERE superssn<>888665555 and dno=dnumber;
+
+//#7.b not sure if this counts
+SELECT ssn, fname, lname, dno, superssn
+FROM Employee left outer join department on dname<>'Research'
+WHERE superssn<>888665555 and dno=dnumber;
+
+//#7.c
+SELECT ssn, fname, lname, dno, superssn
+FROM Employee
+WHERE superssn<>888665555  and 
+dno not in (select dnumber from department where dname ='Research')
+
+//#7.d
+
+
+
+//#8. List the SSN, lname, and hours of all employees (with a dependent) who work <= 10 hours per week on the Computerization project. List each employee only once if 
+//they have more than one dependent. 
+
+SELECT ssn, lname, hours, pno
+FROM employee, works_on w, project, dependent d
+WHERE pno=pnumber and pname = 'Computerization' and d.essn=ssn and w.essn=ssn and hours <= 10
+INTERSECT 
+SELECT ssn, lname, hours, pno
+FROM employee, works_on w, project, dependent d
+WHERE pno=pnumber and pname = 'Computerization' and d.essn=ssn and w.essn=ssn and hours <= 10
+
+//#9.
+
+SELECT ssn
+FROM employee
+minus
+SELECT ssn
+FROM employee, project, works_on
+WHERE pno=pnumber and ssn=essn and pname='ProductY'
+
