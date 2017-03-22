@@ -1,0 +1,21 @@
+//Adam Pluth
+//CS 457
+//Hw #5
+//3/22/17
+
+
+//1
+
+db.hw5.count()
+
+//2
+
+db.hw5.count({"type":"IssuesEvent"})
+
+//3
+
+db.hw5.find({"type":"IssuesEvent"}).count()
+
+//4
+
+
