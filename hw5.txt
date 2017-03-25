@@ -18,4 +18,50 @@ db.hw5.find({"type":"IssuesEvent"}).count()
 
 //4
 
+db.hw5.find({"paylod.release.author.login":"ogarbe"}).pretty()
 
+//5
+
+var a = db.hw5.find({"paylod.release.author.login":"ogarbe"})
+while(a.hasNext()){printjson(a.next());}
+
+//6
+
+db.hw5.find({},{"paylod.issue.labels.color":1,_id:0})
+
+//7
+
+db.hw5.find({"payload.issue.labels.color":{$exists:true}},{"payload.issue.labels.color":1,_id:0})
+
+//8
+
+db.hw5.distinct("id",{"actor":{$exists:true}}).length
+
+//9
+
+db.hw5.find({$and:[{"payload.distinct_size":{$gt:150}},{"created_at":{$lte:"2015-01-01T15:16:27Z"}]},{"payload.distinct_size":1,"created_at":1,_id:0})
+
+//10
+
+db.hw5.find({$and:[{"payload.distinct_size":{$gt:350}},{"created_at":{$lte:"2015-01-01T15:00:01Z"}]},{"payload.distinct_size":1,"created_at":1,_id:0})
+
+//11
+
+var arr = db.hw5.find({"type":PublicEvent"},{"actor.id":1,_id:0}).toArray()
+arr[1]
+
+//12
+
+db.hw5.aggregate([{$group:{_id:"$type",maxValue:{"$max":"$payload.pull_request.number"}}}])
+
+//13
+
+db.hw5.aggregate([{$group:{_id:"$type",maxValue:{"$max":"$payload.pull_request.number"}}},{$sort:{maxValue: -1}}])
+
+//14
+
+db.hw5.find({},{_id:0,"actor.id"}).sort({"actor.id:-1}).limit(1)
+
+//15
+
+db.hw5.group({key:{"payload.ref_type": {$exists: true}}, reduce:function(cur,result){result.count+=1},initial:{count:0}}))
