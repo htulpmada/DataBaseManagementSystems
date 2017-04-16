@@ -18,12 +18,20 @@ if (!$result) {die( 'Error in SQL: ' . mysqli_error($link));}
 while ($row = mysqli_fetch_array($result, MYSQLI_NUM))
 {
         echo "<hr>";  //horizontal line
+        echo "<table border='1'><tr>";//table row
         for($i = 0; $i < sizeof($row); $i++){
-            echo $row[$i] . "<br />";    
+            //echo "<>";
+            $finfo = mysqli_fetch_field_direct($result, $i);
+            echo "<th>" . $finfo->name . "</th>";//table header
         }
-        //echo "name: ". $row["name"] . "<br />";
-        //echo "License_number: ". $row["Lisence_number"] . "<br />";
-        //echo "customer_id: " . $row["customer_id"] .  "<br />";
+        echo "</tr>";//table row
+        
+        echo "<tr>";//table row
+        for($i = 0; $i < sizeof($row); $i++){
+            echo "<td>" . $row[$i] . "</td>";//table data
+        }
+        echo "</tr>";//table row
+        echo "</table>";
 }
 mysqli_free_result ($result);
 mysqli_close($link);   // disconnecting from MySQL
